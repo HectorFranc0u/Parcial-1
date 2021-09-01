@@ -151,6 +151,7 @@ namespace Parcial_1
             StreamWriter sw = File.CreateText(nombre);
             sw.WriteLine(experiencia);
             sw.Dispose();
+            menuadmin();
         }
     }
 }
