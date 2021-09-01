@@ -76,7 +76,7 @@ namespace Parcial_1
                 pr.WriteLine("{0}; {1}", newus, newpass);
                 pr.Close();
             }
-            inicio();
+            menuadmin();
         }
 
         private static Dictionary<object, object> read()
@@ -129,6 +129,7 @@ namespace Parcial_1
                     registro();
                     return true;
                 case "2":
+                    docalumno();
                     return true;
                 case "3":
                     return true;
@@ -137,6 +138,19 @@ namespace Parcial_1
                 default:
                     return false;
             }
+        }
+        private static void docalumno()
+        {
+            Console.Clear();
+            Console.WriteLine("ARCHIVO CON SU EXPERIENCIA PERSONAL.");
+            Console.WriteLine("INGRESE SU NOMBRE.");
+            String nombre = Console.ReadLine();
+            Console.WriteLine("ESCRIBA SU EXPERIENCIA.");
+            string experiencia = Console.ReadLine();
+
+            StreamWriter sw = File.CreateText(nombre);
+            sw.WriteLine(experiencia);
+            sw.Dispose();
         }
     }
 }
