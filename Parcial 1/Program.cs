@@ -23,14 +23,17 @@ namespace Parcial_1
         {
             string adminuser = "admin";
             string adminpass = "123";
+            Console.WriteLine("--------------------------------");
             Console.WriteLine("USUARIO.");
             var user = Console.ReadLine();
 
             if (search(user))
             {
+                Console.WriteLine("--------------------------------");
                 Console.WriteLine("EL USUARIO EXISTE.");
                 Console.WriteLine("");
                 Console.WriteLine("CONTRASENA");
+                Console.WriteLine("--------------------------------");
                 var pass = Console.ReadLine();
 
                 if (!read().ContainsValue(pass))
@@ -46,9 +49,11 @@ namespace Parcial_1
             }
             else if (user == adminuser)
             {
+                Console.WriteLine("--------------------------------");
                 Console.WriteLine("EL USUARIO PERTENECE AL ADMINISTRADOR.");
                 Console.WriteLine("");
                 Console.WriteLine("CONTRASENA");
+                Console.WriteLine("--------------------------------");
                 var pass = Console.ReadLine();
                 if (pass == adminpass)
                 {
@@ -133,13 +138,21 @@ namespace Parcial_1
                     docalumno();
                     return true;
                 case "3":
+                    borrardoc();
                     return true;
                 case "4":
                     Console.WriteLine("PRESIONE CUALQUIER TECLA PARA CERRAR LA CONSOLA.");
+                    Console.ReadKey();
                     return true;
                 default:
                     return false;
             }
+        }
+
+        private static string diralumnos(string nombre)
+        {
+            string alumnosdir = @"C:\Users\hecto\source\repos\Parcial 1\Parcial 1\archivos\" + nombre + ".txt";
+            return alumnosdir;
         }
         private static void docalumno()
         {
@@ -150,14 +163,29 @@ namespace Parcial_1
             Console.WriteLine("ESCRIBA SU EXPERIENCIA.");
             string experiencia = Console.ReadLine();
 
-            StreamWriter sw = File.CreateText(nombre);
+            StreamWriter sw = File.CreateText(diralumnos(nombre));
             sw.WriteLine(experiencia);
             sw.Dispose();
             menuadmin();
         }
         private static void borrardoc()
         {
-
+            Console.WriteLine("ESCRIBA EL NOMBRE DEL ARCHIVO QUE DESEA ELIMINAR.");
+            string nombre = Console.ReadLine();
+            bool result = File.Exists(diralumnos(nombre));
+            if(result == true)
+            {
+                Console.WriteLine("EL ARCHIVO EXISTE.");
+                File.Delete(diralumnos(nombre));
+                Console.WriteLine("ARCHIVO BORRADO EXITOSAMENTE");
+                Console.ReadKey();
+                menuadmin();
+            }
+            else
+            {
+                Console.WriteLine("EL ARCHIVO NO EXISTE.");
+                menuadmin();
+            }
         }
     }
 }
