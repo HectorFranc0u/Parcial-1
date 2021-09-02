@@ -183,9 +183,13 @@ namespace Parcial_1
             }
             else
             {
-                Console.WriteLine("EL ARCHIVO NO EXISTE.");
-                menuadmin();
+                Console.WriteLine("EL USUARIO NO EXISTE.");
+                return false;
             }
+        }
+        private static void menuinvitado()
+        {
+
         }
     }
 }
