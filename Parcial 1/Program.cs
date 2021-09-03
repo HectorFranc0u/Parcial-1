@@ -41,6 +41,7 @@ namespace Parcial_1
                     Console.Write("CONTRASENA CORRECTA");
                     Console.Write("");
                     Console.Write("USTED INGRESO COMO INVITADO.");
+                    menuinvitado();
                 }
                 else
                 {
@@ -163,10 +164,14 @@ namespace Parcial_1
             Console.WriteLine("ESCRIBA SU EXPERIENCIA.");
             string experiencia = Console.ReadLine();
 
-            StreamWriter sw = File.CreateText(diralumnos(nombre));
-            sw.WriteLine(experiencia);
-            sw.Dispose();
+            using (StreamWriter pr = File.AppendText(diralumnos(nombre)))
+            {
+                pr.WriteLine("{0}; {1}", nombre, experiencia);
+                pr.Close();
+            }
             menuadmin();
+
+
         }
         private static void borrardoc()
         {
@@ -183,13 +188,81 @@ namespace Parcial_1
             }
             else
             {
-                Console.WriteLine("EL USUARIO NO EXISTE.");
-                return false;
+                Console.WriteLine("EL ARCHIVO NO EXISTE.");
             }
         }
-        private static void menuinvitado()
+        private static bool menuinvitado()
         {
+            Console.Clear();
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("MENU DE INVITADO.");
+            Console.WriteLine("1 - LEER ARCHIVO.");
+            Console.WriteLine("2 - SALIR");
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("SELECCIONE UNA OPCION.");
 
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    buscardocs();
+                    menuinvitado();
+                    return true;
+                case "2":
+                    Console.WriteLine("PRESIONE CUALQUIER TECLA PARA CERRAR LA CONSOLA.");
+                    Console.ReadKey();
+                    return false;
+                default:
+                    return false;
+            }
+        }
+
+        private static void buscardocs()
+        {
+            DirectoryInfo d = new DirectoryInfo(@"C:\Users\hecto\source\repos\Parcial 1\Parcial 1\archivos");
+
+            FileInfo[] Files = d.GetFiles("*.txt");
+            string str = "";
+            int cont = 1;
+
+            foreach (FileInfo file in Files)
+            {
+                str = Convert.ToString(cont) + " - " + file.Name;
+                Console.WriteLine("{0}", str);
+                cont = cont + 1;
+            }
+
+            Console.WriteLine("-----------------");
+            Console.WriteLine("ESCRIBA EL NOMBRE DE CUALQUIER ARCHIVO PARA MOSTRARLO");
+            string docname = Console.ReadLine();
+            bool result = File.Exists(diralumnos(docname));
+            if (result == true)
+            {
+                Dictionary<object, object> listdata = new Dictionary<object, object>();
+                using (var reader = new StreamReader(diralumnos(docname)))
+                {
+                    string lines;
+                    while ((lines = reader.ReadLine()) != null)
+                    {
+                        string[] keyvalue = lines.Split(';');
+                        if (keyvalue.Length == 2 || keyvalue.Length == 1)
+                        {
+                            listdata.Add(keyvalue[0], keyvalue[1]);
+                        }
+                    }
+                }
+                Console.WriteLine("EL ARCHIVO EXISTE.");
+                Console.WriteLine("EL CONTENIDO DEL ARCHIVO ES.");
+                foreach (KeyValuePair<object, object> data in listdata)
+                {
+                    Console.Write("{0}; {1}", data.Key, data.Value);
+                    Console.WriteLine("");
+                }
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("EL ARCHIVO NO EXISTE.");
+            }
         }
     }
 }
